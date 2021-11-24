@@ -1,4 +1,4 @@
-public struct Toggler {
+public struct TogglerUI {
     public private(set) var text = "Hello, World!"
 
     public init() {

@@ -23,7 +23,7 @@ let package = Package(
             name: "TogglerUI",
             dependencies: []),
         .testTarget(
-            name: "TogglerTests",
+            name: "TogglerUITests",
             dependencies: ["TogglerUI"]),
     ]
 )
