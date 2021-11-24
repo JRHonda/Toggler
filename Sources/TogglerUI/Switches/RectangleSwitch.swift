@@ -21,7 +21,6 @@ public struct RectangleSwitch: View {
     /// used to support preview functionality when working in SPM project
     @State private var switchStateIsOn: Bool = false
     
-    // TODO: - Add parameter for action. Action for both off and on?
     
     // MARK: - Init
     public init(
