@@ -1,5 +1,5 @@
 //
-//  SliderToggle.swift
+//  Slider.swift
 //  
 //
 //  Created by Justin Honda on 11/24/21.
@@ -7,17 +7,19 @@
 
 import SwiftUI
 
-public struct SliderToggle: View {
+public struct Slider: View {
     
     // MARK: - Properties
     
-    private enum Constants {
-        static let padding8: CGFloat = 8
-        static let frameHeight: CGFloat = 32
-        static let rectangleSliderHeight: CGFloat = frameHeight / 2.5
+    public enum Constants {
+        public static let defaultFramewidth: CGFloat = 150
+        fileprivate static let padding8: CGFloat = 8
+        fileprivate static let frameHeight: CGFloat = 32
+        fileprivate static let rectangleSliderHeight: CGFloat = frameHeight / 2.5
     }
     
     public var width: CGFloat
+    public var colorScheme: BiColorScheme
     @Binding public var hasReachedEnd: Bool
     
     @State private var sliderPosition: CGSize = .zero
@@ -27,8 +29,11 @@ public struct SliderToggle: View {
     
     // MARK: - Init
     
-    public init(width: CGFloat = 150, hasReachedEnd: Binding<Bool>) {
+    public init(width: CGFloat = Constants.defaultFramewidth,
+                colorScheme: BiColorScheme = .init(),
+                hasReachedEnd: Binding<Bool>) {
         self.width = width
+        self.colorScheme = colorScheme
         self._hasReachedEnd = hasReachedEnd
     }
     
@@ -38,7 +43,7 @@ public struct SliderToggle: View {
     public var body: some View {
         ZStack {
             Rectangle()
-                .foregroundColor(Color.init(.sRGB, red: 0.25, green: 0.25, blue: 0.25, opacity: 1))
+                .foregroundColor(colorScheme.colorOne)
                 .frame(height: Constants.rectangleSliderHeight)
                 .cornerRadius(Constants.rectangleSliderHeight / 2)
                 .padding([.trailing, .leading], Constants.padding8)
@@ -49,8 +54,10 @@ public struct SliderToggle: View {
                     ZStack {
                         Image(systemName: "chevron.right.circle.fill")
                             .imageScale(.large)
-                            .foregroundColor(.green)
-                            .frame(width: Constants.frameHeight, height: Constants.frameHeight, alignment: .center)
+                            .foregroundColor(colorScheme.colorTwo)
+                            .frame(width: Constants.frameHeight,
+                                   height: Constants.frameHeight,
+                                   alignment: .center)
                             .offset(x: sliderPosition.width)
                             .gesture(
                                 DragGesture()
@@ -106,6 +113,6 @@ public struct SliderToggle_Previews: PreviewProvider {
     @State static var hasReachedEnd: Bool = false
     
     public static var previews: some View {
-        SliderToggle(hasReachedEnd: $hasReachedEnd)
+        Slider(hasReachedEnd: $hasReachedEnd)
     }
 }
