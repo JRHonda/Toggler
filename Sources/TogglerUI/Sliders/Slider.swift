@@ -7,16 +7,17 @@
 
 import SwiftUI
 
+// TODO: - Future -> Support two kinds of sliders. One that once the end is reached, the circle component turns into a tappable button to end an ongoing action. The other that will just disaable and the developer can animate away or whatever to continue on to the next step.
 public struct Slider: View {
-    
-    // MARK: - Properties
     
     public enum Constants {
         public static let defaultFramewidth: CGFloat = 150
         fileprivate static let padding8: CGFloat = 8
         fileprivate static let frameHeight: CGFloat = 32
-        fileprivate static let rectangleSliderHeight: CGFloat = frameHeight / 2.5
+        fileprivate static let rectangleSliderHeight: CGFloat = frameHeight * 0.4 // forty %
     }
+    
+    // MARK: - Properties
     
     public var width: CGFloat
     public var colorScheme: BiColorScheme
@@ -95,12 +96,14 @@ public struct Slider: View {
     }
     
     
-    // MARK: - Internal
+    // MARK: - Private
     
-    /// TODO
+    /// Calculates the appropriate end point value that the slider should trigger that the end
+    /// has been reached. Prevents the circle component of the slider from appearing to reach the
+    /// end too early or late.
     /// - Parameter proxy: GeometryReader proxy
     /// - Returns: The value used to determine the end point for the slider
-    func getNormalizedEndPoint(using proxy: GeometryProxy) -> CGFloat {
+    private func getNormalizedEndPoint(using proxy: GeometryProxy) -> CGFloat {
         return proxy.size.width - Constants.padding8 - (Constants.frameHeight / 2)
     }
 }

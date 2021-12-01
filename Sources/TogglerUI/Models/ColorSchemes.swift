@@ -21,7 +21,6 @@ public struct BiColorScheme {
     }
 }
 
-// TODO: - Come up with better name
 public struct SwitchTriColorScheme {
     public let background: Color
     public let isOffColor: Color
