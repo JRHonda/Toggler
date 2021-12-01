@@ -12,9 +12,16 @@ public struct RectangleSwitch: View {
     private enum Constants {
         static let stateChangeAnimationDuration = 0.25
         static let instantAnimationDuration = 0.0001
+        static let shadowRadiusForSwitchStateIndicator: CGFloat = 1
+        
+        enum IndicatorState {
+            case off
+            case on
+        }
     }
     
     // MARK: - Properties
+    
     public var height: CGFloat
     public var width: CGFloat
     public var leftText: String
@@ -26,9 +33,10 @@ public struct RectangleSwitch: View {
     /// used to support preview functionality when working in SPM project
     @State private var switchStateIsOn: Bool = false
     @State private var shadowColor: Color = .black
-    
 
+    
     // MARK: - Init
+    
     public init(
         height: CGFloat = 30,
         width: CGFloat = 100,
@@ -48,6 +56,7 @@ public struct RectangleSwitch: View {
     
     
     // MARK: - Body
+    
     public var body: some View {
         ZStack {
             Rectangle()
@@ -58,7 +67,10 @@ public struct RectangleSwitch: View {
                                  ? colorScheme.isOnColor
                                  : colorScheme.isOffColor)
                 .padding(switchIndicatorEdgeSet, width / 2)
-                .shadow(color: shadowColor, radius: 1, x: .zero, y: .zero)
+                .shadow(color: shadowColor,
+                        radius: Constants.shadowRadiusForSwitchStateIndicator,
+                        x: .zero,
+                        y: .zero)
                 // clips shadow outside of container
                 .mask(Rectangle())
                 
@@ -74,21 +86,9 @@ public struct RectangleSwitch: View {
             }
             
             ZStack {
-                // left (off)
-                Color.clear
-                    .contentShape(Rectangle())
-                    .frame(width: width / 2)
-                    .position(x: 0.25 * width, y: height / 2)
-                    .onTapGesture { performStateChangeWithAnimation() }
-                    .disabled(!switchStateIsOn)
-                
-                // right (on)
-                Color.clear
-                    .contentShape(Rectangle())
-                    .frame(width: width / 2)
-                    .position(x: 0.75 * width, y: height / 2)
-                    .onTapGesture { performStateChangeWithAnimation() }
-                    .disabled(switchStateIsOn)
+                buildClearTapGesture(for: .off, withPosition: 0.25 * width, y: height / 2)
+
+                buildClearTapGesture(for: .on, withPosition: 0.75 * width, y: height / 2)
             }
         }
         .frame(width: width, height: height, alignment: .center)
@@ -96,6 +96,19 @@ public struct RectangleSwitch: View {
     
     
     // MARK: - Private
+    
+    @ViewBuilder
+    private func buildClearTapGesture(for isOnState: Constants.IndicatorState,
+                                      withPosition x: CGFloat,
+                                      y: CGFloat) -> some View {
+        Color.clear
+            .contentShape(Rectangle())
+            .frame(width: width / 2)
+            .position(x: x, y: y)
+            .onTapGesture { performStateChangeWithAnimation() }
+            .disabled(isOnState == .on ? switchStateIsOn : !switchStateIsOn)
+    }
+    
     private func performStateChangeWithAnimation() {
         shadowColor = shadowColor.opacity(0.5)
         withAnimation(.easeIn(duration: Constants.stateChangeAnimationDuration)) {
@@ -107,6 +120,7 @@ public struct RectangleSwitch: View {
         let identityAnimation = Animation
             .easeIn(duration: Constants.instantAnimationDuration)
             .delay(Constants.stateChangeAnimationDuration)
+        
         withAnimation(identityAnimation) {
             shadowColor = .black
         }
@@ -115,6 +129,7 @@ public struct RectangleSwitch: View {
 
 
 // MARK: - PreviewProvider
+
 public struct RectangleSwitch_Previews: PreviewProvider {
     @State public static var isOn: Bool = false
     
