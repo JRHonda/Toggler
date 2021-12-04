@@ -79,6 +79,7 @@ public struct RectangleSwitch: View {
                     Spacer()
                     Text(leftText)
                     Spacer()
+                    
                     Spacer()
                     Text(rightText)
                     Spacer()
@@ -87,8 +88,10 @@ public struct RectangleSwitch: View {
             
             ZStack {
                 buildClearTapGesture(for: .off, withPosition: 0.25 * width, y: height / 2)
+                    .accessibilityIdentifier("rectangle_switch_off_identifier")
 
                 buildClearTapGesture(for: .on, withPosition: 0.75 * width, y: height / 2)
+                    .accessibilityIdentifier("rectangle_switch_on_identifier")
             }
         }
         .frame(width: width, height: height, alignment: .center)
